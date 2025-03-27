@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
 import { Container, Grid, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, TextField, InputAdornment } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { deepPurple, green, blue, grey, red, orange } from '@mui/material/colors';
@@ -363,6 +363,32 @@ function App() {
               <Typography variant="h5" sx={{ color: '#9c27b0', mb: 3, fontWeight: 600 }}>
                 Process List
               </Typography>
+              
+              {/* Add Process Histogram */}
+              <Box sx={{ height: 200, mb: 4 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={filteredProcesses
+                      .sort((a, b) => b.cpu_percent - a.cpu_percent)
+                      .slice(0, 10)}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                    <XAxis dataKey="name" stroke="#00e5ff" angle={-45} textAnchor="end" height={60} />
+                    <YAxis stroke="#00e5ff" />
+                    <Tooltip
+                      contentStyle={{
+                        background: 'rgba(0,0,0,0.8)',
+                        border: '1px solid #00e5ff',
+                        borderRadius: '8px',
+                        color: '#fff'
+                      }}
+                    />
+                    <Bar dataKey="cpu_percent" name="CPU %" fill="#2196f3" />
+                    <Bar dataKey="memory_percent" name="Memory %" fill="#4caf50" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </Box>
+
               <TextField
                 fullWidth
                 variant="outlined"
