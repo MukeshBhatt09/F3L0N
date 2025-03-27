@@ -338,7 +338,8 @@ function App() {
               </StyledPaper>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            {/* Move Memory Usage to full width */}
+            <Grid item xs={12}>
               <StyledPaper elevation={3}>
                 <Typography variant="h5" sx={{ color: green[700], mb: 2 }}>
                   Memory Usage
