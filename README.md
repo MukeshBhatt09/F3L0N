@@ -1,7 +1,7 @@
 # __F3L0N__ 
 ### AI powered OS Process monitoring dashboard. 
 
-```markdown
+
 # F3L0N - AI-Powered OS Process Monitor
 
 F3L0N is an advanced process monitoring dashboard that leverages artificial
@@ -83,12 +83,6 @@ python main.py
 cd frontend
 npm start
  ```
-
-## Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgments
 - Built with modern web technologies and AI capabilities
