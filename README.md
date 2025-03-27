@@ -6,9 +6,6 @@
 
 F3L0N is an advanced process monitoring dashboard that leverages artificial
 intelligence to provide intelligent system analysis and process management capabilities.
-![Screenshot 2025-03-27 101035](https://github.com/user-attachments/assets/1cd7e494-63c4-4d4a-8f5e-ba12426964cd)
-![Screenshot 2025-03-27 101055](https://github.com/user-attachments/assets/6e328dd4-18a2-4d06-a3a5-a59288411c67)
-![Screenshot 2025-03-27 101108](https://github.com/user-attachments/assets/2915a0c0-0db7-4a9a-b120-068dc7c4edb1)
 
 ## Features
 
