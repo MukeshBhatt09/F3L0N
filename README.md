@@ -88,6 +88,3 @@ npm start
 - Built with modern web technologies and AI capabilities
 - Inspired by the need for intelligent system monitoring
 - Special thanks to the open-source community
-```plaintext
-
-Would you like me to explain any part of the README in more detail?
