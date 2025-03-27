@@ -169,6 +169,84 @@ function App() {
     ];
   };
 
+  // Add new AI analysis functions
+  const getAIAnalysis = () => {
+    const latestMetrics = metrics[metrics.length - 1];
+    if (!latestMetrics) return null;
+  
+    // Detect bottlenecks
+    const bottlenecks = [];
+    if (latestMetrics.cpu > 80) bottlenecks.push('High CPU usage indicates processing bottleneck');
+    if (latestMetrics.memory > 75) bottlenecks.push('Memory usage approaching critical levels');
+  
+    // Resource forecasting based on recent trends
+    const recentMetrics = metrics.slice(-10);
+    const cpuTrend = recentMetrics.reduce((acc, curr) => acc + curr.cpu, 0) / recentMetrics.length;
+    const memoryTrend = recentMetrics.reduce((acc, curr) => acc + curr.memory, 0) / recentMetrics.length;
+  
+    return {
+      bottlenecks,
+      forecast: {
+        cpu: cpuTrend > latestMetrics.cpu ? 'Increasing' : 'Stable',
+        memory: memoryTrend > latestMetrics.memory ? 'Increasing' : 'Stable'
+      },
+      optimizations: getOptimizationSuggestions(filteredProcesses)
+    };
+  };
+
+  const getOptimizationSuggestions = (processes) => {
+    const suggestions = [];
+    
+    // Find resource-heavy processes
+    const highCpuProcesses = processes.filter(p => p.cpu_percent > 30);
+    const highMemProcesses = processes.filter(p => p.memory_percent > 40);
+  
+    if (highCpuProcesses.length > 0) {
+      suggestions.push(`High CPU processes detected: ${highCpuProcesses.map(p => p.name).join(', ')}`);
+    }
+    if (highMemProcesses.length > 0) {
+      suggestions.push(`Memory-intensive processes: ${highMemProcesses.map(p => p.name).join(', ')}`);
+    }
+  
+    return suggestions;
+  };
+
+  // Add to the System Analysis section
+  <Grid item xs={12} md={6}>
+    <StyledPaper elevation={3}>
+      <Typography variant="h5" sx={{ color: blue[700], mb: 2, fontWeight: 600 }}>
+        AI System Analysis
+      </Typography>
+      {getAIAnalysis() && (
+        <Box sx={{ textAlign: 'left', p: 2 }}>
+          {getAIAnalysis().bottlenecks.length > 0 && (
+            <>
+              <Typography variant="h6" color="error.main">Bottlenecks Detected:</Typography>
+              {getAIAnalysis().bottlenecks.map((b, i) => (
+                <Typography key={i} color="error.main" variant="body2" sx={{ mb: 1 }}>• {b}</Typography>
+              ))}
+            </>
+          )}
+          <Typography variant="h6" color="primary">Resource Forecast:</Typography>
+          <Typography variant="body2" sx={{ mb: 1 }}>
+            CPU Trend: {getAIAnalysis().forecast.cpu}
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 2 }}>
+            Memory Trend: {getAIAnalysis().forecast.memory}
+          </Typography>
+          {getAIAnalysis().optimizations.length > 0 && (
+            <>
+              <Typography variant="h6" color="warning.main">Optimization Suggestions:</Typography>
+              {getAIAnalysis().optimizations.map((opt, i) => (
+                <Typography key={i} color="warning.main" variant="body2" sx={{ mb: 1 }}>• {opt}</Typography>
+              ))}
+            </>
+          )}
+        </Box>
+      )}
+    </StyledPaper>
+  </Grid>
+  // Remove the standalone Grid component and integrate it into the return statement
   return (
     <>
       <GlobalStyles />
@@ -338,7 +416,144 @@ function App() {
               </StyledPaper>
             </Grid>
 
-            {/* Move Memory Usage to full width */}
+            {/* Keep only this enhanced AI Analysis section */}
+            <Grid item xs={12}>
+              <StyledPaper elevation={3} sx={{
+                background: 'rgba(20, 20, 20, 0.85)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(77, 249, 255, 0.1)',
+                position: 'relative',
+                overflow: 'hidden',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: 'radial-gradient(circle at center, rgba(77, 249, 255, 0.1) 0%, transparent 70%)',
+                  pointerEvents: 'none',
+                }
+              }}>
+                <Typography variant="h4" sx={{ 
+                  color: '#00e5ff',
+                  mb: 3,
+                  fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  textShadow: '0 0 10px rgba(77, 249, 255, 0.5)',
+                  position: 'relative'
+                }}>
+                  AI System Analysis
+                </Typography>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={4}>
+                    <Box sx={{
+                      p: 2,
+                      borderRadius: 2,
+                      background: 'rgba(0,0,0,0.3)',
+                      border: '1px solid rgba(77, 249, 255, 0.2)',
+                      height: '100%'
+                    }}>
+                      <ChartContainer>
+                        <ResponsiveContainer>
+                          <PieChart>
+                            <Pie
+                              data={getSystemAnalysis()}
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={60}
+                              outerRadius={80}
+                              paddingAngle={5}
+                              dataKey="value"
+                            >
+                              {getSystemAnalysis().map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.color} />
+                              ))}
+                            </Pie>
+                            <Tooltip
+                              formatter={(value, name) => [`${value.toFixed(1)}%`, name]}
+                              contentStyle={{
+                                background: 'rgba(0,0,0,0.8)',
+                                border: '1px solid rgba(77, 249, 255, 0.3)',
+                                borderRadius: 8,
+                                color: '#fff'
+                              }}
+                            />
+                            <Legend />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} md={8}>
+                    {getAIAnalysis() && (
+                      <Box sx={{ 
+                        textAlign: 'left',
+                        p: 3,
+                        borderRadius: 2,
+                        background: 'rgba(0,0,0,0.3)',
+                        border: '1px solid rgba(77, 249, 255, 0.2)',
+                        height: '100%'
+                      }}>
+                        {getAIAnalysis().bottlenecks.length > 0 && (
+                          <Box sx={{ mb: 3 }}>
+                            <Typography variant="h6" sx={{ 
+                              color: '#ff4444',
+                              textShadow: '0 0 8px rgba(255, 68, 68, 0.5)',
+                              mb: 1
+                            }}>
+                              Bottlenecks Detected:
+                            </Typography>
+                            {getAIAnalysis().bottlenecks.map((b, i) => (
+                              <Typography key={i} sx={{ 
+                                color: '#ff6b6b',
+                                mb: 1,
+                                pl: 2,
+                                borderLeft: '3px solid #ff4444'
+                              }}>• {b}</Typography>
+                            ))}
+                          </Box>
+                        )}
+                        <Typography variant="h6" sx={{ 
+                          color: '#00e5ff',
+                          textShadow: '0 0 8px rgba(77, 249, 255, 0.5)',
+                          mb: 1
+                        }}>
+                          Resource Forecast:
+                        </Typography>
+                        <Box sx={{ mb: 3, pl: 2, borderLeft: '3px solid #00e5ff' }}>
+                          <Typography sx={{ color: '#fff', mb: 1 }}>
+                            CPU Trend: {getAIAnalysis().forecast.cpu}
+                          </Typography>
+                          <Typography sx={{ color: '#fff', mb: 1 }}>
+                            Memory Trend: {getAIAnalysis().forecast.memory}
+                          </Typography>
+                        </Box>
+                        {getAIAnalysis().optimizations.length > 0 && (
+                          <>
+                            <Typography variant="h6" sx={{ 
+                              color: '#ffd700',
+                              textShadow: '0 0 8px rgba(255, 215, 0, 0.5)',
+                              mb: 1
+                            }}>
+                              Optimization Suggestions:
+                            </Typography>
+                            <Box sx={{ pl: 2, borderLeft: '3px solid #ffd700' }}>
+                              {getAIAnalysis().optimizations.map((opt, i) => (
+                                <Typography key={i} sx={{ color: '#ffe44d', mb: 1 }}>• {opt}</Typography>
+                              ))}
+                            </Box>
+                          </>
+                        )}
+                      </Box>
+                    )}
+                  </Grid>
+                </Grid>
+              </StyledPaper>
+            </Grid>
+
+            {/* Memory Usage and Process List */}
             <Grid item xs={12}>
               <StyledPaper elevation={3}>
                 <Typography variant="h5" sx={{ color: green[700], mb: 2 }}>
