@@ -300,6 +300,44 @@ function App() {
               </StyledPaper>
             </Grid>
 
+            {/* Add new Grid item for AI Analysis Pie Chart */}
+            <Grid item xs={12} md={6}>
+              <StyledPaper elevation={3}>
+                <Typography variant="h5" sx={{ color: blue[700], mb: 2, fontWeight: 600 }}>
+                  System Analysis
+                </Typography>
+                <ChartContainer>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={getSystemAnalysis()}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={80}
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                        {getSystemAnalysis().map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        formatter={(value, name) => [`${value.toFixed(1)}%`, name]}
+                        contentStyle={{
+                          background: 'rgba(255,255,255,0.95)',
+                          border: 'none',
+                          borderRadius: 12,
+                          boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+                        }}
+                      />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              </StyledPaper>
+            </Grid>
+
             <Grid item xs={12} md={6}>
               <StyledPaper elevation={3}>
                 <Typography variant="h5" sx={{ color: green[700], mb: 2 }}>
